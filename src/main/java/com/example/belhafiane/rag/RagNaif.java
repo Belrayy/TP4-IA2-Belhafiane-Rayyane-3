@@ -27,6 +27,12 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 import java.util.logging.ConsoleHandler;
 
+import dev.langchain4j.rag.DefaultRetrievalAugmentor;
+import dev.langchain4j.rag.RetrievalAugmentor;
+import dev.langchain4j.rag.query.transformer.CompressingQueryTransformer;
+
+import dev.langchain4j.service.UserMessage;
+
 public class RagNaif {
     public static void main(String[] args) {
 
@@ -50,7 +56,7 @@ public class RagNaif {
 
         interface Assistant {
             // Prend un message de l'utilisateur et retourne une réponse du LLM.
-            String chat(String userMessage);
+            String chat(@UserMessage String userMessage);
         }
 
         ApacheTikaDocumentParser parser =
@@ -106,13 +112,30 @@ public class RagNaif {
                 MessageWindowChatMemory.withMaxMessages(10);
 
 
+//        CompressingQueryTransformer queryTransformer =
+//                CompressingQueryTransformer.builder()
+//                        .chatModel(model)
+//                        .build();
+//
+//        RetrievalAugmentor retrievalAugmentor =
+//                DefaultRetrievalAugmentor.builder()
+//                        .queryTransformer(queryTransformer)
+//                        .contentRetriever(retriever)
+//                        .build();
+//
+//        Assistant assistant =
+//                AiServices.builder(Assistant.class)
+//                        .chatModel(model)
+//                        .chatMemory(memory)
+//                        .retrievalAugmentor(retrievalAugmentor)
+//                        .build();
+
         Assistant assistant =
                 AiServices.builder(Assistant.class)
                         .chatModel(model)
                         .chatMemory(memory)
                         .contentRetriever(retriever)
                         .build();
-
 
         Scanner scanner = new Scanner(System.in);
 
